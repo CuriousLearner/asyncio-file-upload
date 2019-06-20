@@ -3,15 +3,21 @@ import asyncio
 
 async def handle_file_upload(reader, writer):
     import ipdb; ipdb.set_trace()
-    data = b''
+    data = bytearray()
     # data = await reader.read(40000000000)
     i = 1
-    while not reader.at_eof():
+    while True:
         print("CHUNK", i)
-        print(reader.at_eof())
-        if reader.at_eof():
+        # print(reader.at_eof())
+        # if reader.at_eof():
+        #     break
+        # import ipdb; ipdb.set_trace()
+        chunk = await reader.read(65536)
+        print(len(chunk))
+        if not chunk:
+            # empty chunk signals the end of file
             break
-        data += await reader.read(1000000)
+        data += chunk
         i += 1
     print("data")
     print(data)
